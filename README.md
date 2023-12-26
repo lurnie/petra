@@ -1,7 +1,7 @@
 # Petra
 A sector-based 3D engine written in Javascript.
 
-![](src/screenshot/png)
+![screenshot](./img/screenshot.png)
 
 
 ## Controls
