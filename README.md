@@ -9,7 +9,9 @@ Use WASD to move, and the Mouse or Arrow Keys to look around. Press Space to go 
 
 Collision doesn't exist currently, so make sure not to go out of bounds.
 ## Use
-Download the files and run them with some kind of server. 
+You can view the project by going to https://lurnie.github.io/petra/.
+
+If you want to host it yourself, download the files and run them with some kind of server. 
 
 For this, you can use [http-server](https://github.com/http-party/http-server) with ```npx``` by navigating to the file directory and putting ```npx http-server``` into the console. Then, go to http://192.168.12.205:8080.
 
