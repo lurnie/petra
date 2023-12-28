@@ -43,6 +43,7 @@ function init() {
     // events that keep track of which keys are being pressed
     document.addEventListener('keydown', (event) => {
         if (!pressedKeys.includes(event.code)) { pressedKeys.push(event.code); }
+        canvas.canvas.requestPointerLock({unadjustedMovement: true});
     });
     document.addEventListener('keyup', (event) => {
         if (pressedKeys.includes(event.code)) { pressedKeys.splice(pressedKeys.indexOf(event.code), 1); }
