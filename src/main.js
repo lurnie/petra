@@ -6,14 +6,18 @@ import { loadTexture } from "./textures.js";
 import { drawWall } from "./drawSector.js";
 import { Wall, Sector, Sprite } from "./levelData.js";
 import { drawSprite } from "./drawSprite.js";
+import { loadMap } from "./map.js";
 
 window.addEventListener('load',
     function setupCanvas(event) {
         window.removeEventListener(event.type, setupCanvas, false);
-        init();
+        loadMap('./maps/level.txt').then(map => {init(map)})
     }
 )
-function init() {
+function init(loadedMap) {
+    let sectors = loadedMap;
+    let sectorsToDraw;
+
     let player = {
         x: -100,
         y: 200,
@@ -24,7 +28,8 @@ function init() {
         angle: 0,
         upDown: 0,
         height: 0, // how high the camera is compared to the player z
-        zoom: 1 // NOTE: currently, changing the zoom messes up the floors
+        zoom: 1, // NOTE: currently, changing the zoom messes up the floors
+        sector: sectors['#start']
     }
     
     let spf = 0;
@@ -76,32 +81,9 @@ function init() {
     
     const fullscreenClipping = new Clipping(0, 0, canvas.height, canvas.width, 0, canvas.height);
 
-    let sectorsToDraw;
-    // TODO: load map data from a file
-    let sectors = [
-        new Sector(0, 1000, 0.8, [new Wall(-400, -160, 200, -100, ['cross', 'gray', 'gray']), new Wall(200, -100, 260, 240), new Wall(260, 240, 60, 400), new Wall(60, 400, -400, 280), new Wall(-400, 280, -400, -160, 'cross'), ], 'def', 'cross', 0.3),
-        new Sector(50, 350, 0.5, [new Wall(-400, -160, -417, -360, 'gray'), new Wall(-417, -360, 36, -466, 'gray'), new Wall(36, -466, 364, -287, 'gray'), new Wall(364, -287, 200, -100, 'gray'), new Wall(200, -100, -400, -160, 'gray')], 'gray', 'gray', 0.5, 3, 20, 1.44),
-        new Sector(150, 600, 1, [new Wall(467, 162, 200, -100), new Wall(710, -233, 467, 162), new Wall(364, -287, 710, -233), new Wall(200, -100, 364, -287, 'gray')], 'cat', 'cross', 0.5),
-        new Sector(400, 800, 0.5, [new Wall(-400, -160, -417, -400, 'gray'), new Wall(-417, -400, 36, -500, 'gray'), new Wall(36, -500, 364, -287, 'gray'), new Wall(364, -287, 200, -100, 'gray'), new Wall(200, -100, -400, -160, 'gray')], 'gray', 'gray', 0.5, 3, 20, 1.44),
-
-    ];
-    player.sector = sectors[0];
-
-    // !!! A WALL'S ADJOINS MUST BE SORTED FROM HIGHEST Z TO LOWEST Z !!!
-    // TODO: automate that
-    sectors[0].walls[0].adjoins = [sectors[3], sectors[1]];
-    sectors[1].walls[4].adjoins = [sectors[0]];
-    sectors[1].walls[3].adjoins = [sectors[2]];
-    sectors[2].walls[3].adjoins = [sectors[3], sectors[1]];
-    sectors[3].walls[3].adjoins = [sectors[2]];
-    sectors[3].walls[4].adjoins = [sectors[0]];
-
-
     player.sinAngle = Math.sin(player.angle);
     player.cosAngle = Math.cos(player.angle);
     
-    new Sprite(-80, -271, 180, sectors[1], 'cat', 0.2); new Sprite(0, 200, 300, sectors[0], 'cat', 0.2);
-
     requestAnimationFrame(tick);
     
     function tick() {

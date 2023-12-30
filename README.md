@@ -21,13 +21,13 @@ This engine is sector-based, similar to the Build Engine. Basically, the level i
 The level is rendered by first drawing all the walls in the player's current sector. 
 Then, if any walls have adjoins, it will go to the adjoining sector and draw that one within a smaller window.
 ## Todo
+-  [x] Load levels from files
 - [ ] Collision
 - [ ] More texture options
 - [ ] Concave sectors
 - [ ] Sky
 - [ ] Decals
 - [ ] Slopes
--  [ ] Load levels from files
 -  [ ] Level editor
 
 ## Bugs

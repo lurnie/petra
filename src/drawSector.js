@@ -179,7 +179,7 @@ function drawWall(wall, canvas, player, clippingWindows, textures) {
             sectionsToDraw.push([
                 {slope: slopeBottomAdj, x: bottomAdj.l.x, y: bottomAdj.l.y},
                 {slope: slopeBottom, x: bottom.l.x, y: bottom.l.y}
-            ])  
+            ]);
         }
     }
 
