@@ -20,8 +20,8 @@ function init(loadedMap) {
 
     let player = {
         x: -100,
-        y: 200,
-        z: 50,
+        y: 150,
+        z: 70,
         xVelocity: 0,
         yVelocity: 0,
         speed: 10,

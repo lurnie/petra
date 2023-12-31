@@ -8,7 +8,7 @@
 // to create a sector, start the line with # and the sector's name (no spaces)
 // then, use the rest of the line for the sector's attributes, separated by ,
 
--400 -160, cross cat def, ADJ #2 #4, 200 -100, 260 240, 60 400, -400 280, cross
+-400 -160, cross gray gray, ADJ #2 #4, 200 -100, 260 240, 60 400, -400 280, cross
 
 // to define a sector's walls, list the sector's vertices after creating it, with a space between x and y, and a , between each vertex
 // you can add textures by writing the texture's name in between the 2 vertices of the wall. if the wall is connected to sectors, you 
@@ -17,19 +17,19 @@
 
 // you can add adjoins (connections to other sectors) by writing ADJ and then listing the sectors this wall connects to
 
-SPRITE, 0 200 300, TEXTURE cat, SCALE 0.2, SPRITE, -300 200 300, TEXTURE cat, SCALE 0.05
+SPRITE, 0 200 300, TEXTURE cat, SCALE 0.2, SPRITE, -300 200 50, TEXTURE cat, SCALE 0.05
 
 // to create a sprite, start with SPRITE. write x y z coordinates with spaces between them, and add any other attributes, separated by ,
 // you can have multiple sprites, as long as you separate each with SPRITE
 // all sprites in a sector must be written on the same line
 
 
-#2, FLOORZ 50, CEILINGZ 350, SHADE 0.5, FLOORT gray, CEILINGT gray, TILESCALE 0.5, XOFFSET 3, YOFFSET 20, ANGLEOFFSET 1.44
+#2, FLOORZ 25, CEILINGZ 350, SHADE 0.5, FLOORT gray, CEILINGT gray, TILESCALE 0.5, XOFFSET 3, YOFFSET 20, ANGLEOFFSET 1.44
 -400 -160, gray, -417 -360, gray, 36 -466, gray, 364 -287, gray, ADJ #3, 200 -100, gray, ADJ #start
 SPRITE, -80 -271 180, TEXTURE cat, SCALE 0.2
 
 #3, FLOORZ 150, CEILINGZ 600, SHADE 1, FLOORT cat, CEILINGT cross, TILESCALE 0.5
-462 162, 200 -100, ADJ #2 #4, 364 -287, gray, 710 -233, 467 162
+462 162, 200 -100, gray, ADJ #2 #4, 364 -287, gray, 710 -233, 467 162
 
 #4, FLOORZ 400, CEILINGZ 800, SHADE 0.5, FLOORT gray, CEILINGT gray, TILESCALE 0.5, XOFFSET 3, YOFFSET 20, ANGLEOFFSET 1.44
 -400 -160, gray, -417 -400, gray, 36 -500, gray, 364 -287, ADJ #3, gray, 200 -100, gray, ADJ #start
