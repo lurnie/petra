@@ -1,5 +1,5 @@
-import { drawPixel, screenPos } from "./render.js";
-import { lineY } from "./math.js";
+import {drawPixel, screenPos} from "./render.js";
+import {lineY} from "./math.js";
 
 
 function drawSprite(sprite, canvas, player, clippingWindows, textures) {
@@ -11,10 +11,10 @@ function drawSprite(sprite, canvas, player, clippingWindows, textures) {
     const scaler = sprite.scale * player.zoom;
     let width = texture.width * canvas.width * scaler / depth;
     let height = texture.height * canvas.height * scaler / depth;
-    
+
     let startX = startingPoint.x;
     let endX = startingPoint.x + width;
-    
+
     if (depth < 0 ) {return;}
 
     // x clipping
@@ -53,4 +53,4 @@ function drawSprite(sprite, canvas, player, clippingWindows, textures) {
     }
 }
 
-export { drawSprite };
+export {drawSprite};

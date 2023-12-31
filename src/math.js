@@ -54,4 +54,4 @@ function rotate(x, y, cos, sin) {
     return {x: rotatedX, y: rotatedY};
 }
 
-export { intersectionOfLines, lineY, intersectionOfLineSegments, rotate };
+export {intersectionOfLines, lineY, intersectionOfLineSegments, rotate};

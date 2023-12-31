@@ -1,4 +1,4 @@
-import { intersectionOfLineSegments, lineY, intersectionOfLines } from "./math.js";
+import {intersectionOfLineSegments, lineY} from "./math.js";
 
 
 function move(player, amount, angle) {
@@ -23,17 +23,17 @@ function move(player, amount, angle) {
 function controls(player, pressedKeys, mouse, spf, canvas) {
     let fps = 1/spf;
     if (pressedKeys.includes('KeyF')) {console.log(fps);}
-    
+
     if (pressedKeys.includes('KeyW')) { move(player, player.speed, player.angle) }
     if (pressedKeys.includes('KeyS')) { move(player, -player.speed, player.angle) }
     if (pressedKeys.includes('KeyA')) { move(player, player.speed, player.angle + (Math.PI / 2)) }
     if (pressedKeys.includes('KeyD')) { move(player, -player.speed, player.angle + (Math.PI / 2)) }
-    
+
     if (pressedKeys.includes('Space')) {player.z += player.speed;}
     if (pressedKeys.includes('ShiftLeft')) {player.z -= player.speed;}
 
     const maxUpDown = canvas.height * 1.5;
-    
+
     const angleSpeed = 0.006;
     player.angle -= mouse.x * angleSpeed;
     const upDownSpeed = 4;
@@ -49,11 +49,9 @@ function controls(player, pressedKeys, mouse, spf, canvas) {
 
     if (pressedKeys.includes('ArrowLeft')) {player.angle += 0.03;}
     if (pressedKeys.includes('ArrowRight')) {player.angle -= 0.03;}
-    if (pressedKeys.includes('ArrowLeft') || pressedKeys.includes('ArrowRight')) { 
-        
-    }
+
     while (player.angle > Math.PI * 2) {player.angle -= Math.PI * 2;}
     while (player.angle < 0) {player.angle += Math.PI * 2;}
 }
 
-export { controls };
+export {controls};

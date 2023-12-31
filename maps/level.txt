@@ -11,7 +11,7 @@
 -400 -160, cross gray gray, ADJ #2 #4, 200 -100, 260 240, 60 400, -400 280, cross
 
 // to define a sector's walls, list the sector's vertices after creating it, with a space between x and y, and a , between each vertex
-// you can add textures by writing the texture's name in between the 2 vertices of the wall. if the wall is connected to sectors, you 
+// you can add textures by writing the texture's name in between the 2 vertices of the wall. if the wall is connected to sectors, you
 // can add different textures for each section of the wall by listing multiple textures in descending order of which section
 // should use them (high -> low)
 

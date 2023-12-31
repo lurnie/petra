@@ -26,4 +26,4 @@ function loadTexture(source, name, textures, canvas) {
     }
 }
 
-export { loadTexture };
+export {loadTexture};

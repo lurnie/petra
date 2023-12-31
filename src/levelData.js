@@ -10,8 +10,8 @@ class Wall {
         this.adjoins = adjoins;
         if (adjoins.length === 0) {this.adjoins = false;}
         this.texture = texture;
-        if (texture.length === 0) {texture = 'def';} 
-        
+        if (texture.length === 0) {texture = 'def';}
+
         if (!(texture instanceof Array)) {
             this.texture = [texture, ];
         }
@@ -33,7 +33,7 @@ class Sector {
         this.floorTexture = floorTexture;
         this.ceilingTexture = ceilingTexture;
         this.sprites = [ ];
-        
+
         this.walls = walls;
         this.walls.forEach((wall) => {wall.z1 = this.floorZ; wall.z2 = this.ceilingZ; wall.brightness = this.brightness; wall.sector = this;})
     }
@@ -58,7 +58,7 @@ class Sprite {
         this.updateShade = updateShade
         this.shade = shade;
         if (this.updateShade) {this.shade = sector.brightness;}
-        
+
         this.texture = texture;
         this.scale = scale;
     }

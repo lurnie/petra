@@ -1,4 +1,4 @@
-import { Wall, Sector, Sprite } from "./levelData.js";
+import {Wall, Sector, Sprite} from "./levelData.js";
 function num(input) {
     // converts input to a number, unless the input is false
     // if the numbers were always converted, then undefined values would turn into NaN, which we don't want
@@ -7,7 +7,7 @@ function num(input) {
 // loads the map from a file
 function createStructure(map) {
     // goes through the map file to find all the sectors, floors, their attributes, etc.
-    let lines = map.split(/\r\n|[\n\v\f\r\x85\u2028\u2029]/); // splits it into newlines
+    let lines = map.split(/\r\n|\n/); // splits it into newlines
     let sectorsToCreate = {};
     let current; // current sector
     let adjoins = {};
@@ -31,8 +31,8 @@ function createStructure(map) {
                 let part = parts[i];
                 let split = part.split(' ');
                 if (!isNaN(split[0])) {
-                    currentSprite.x = Number(split[0]); 
-                    currentSprite.y = Number(split[1]); 
+                    currentSprite.x = Number(split[0]);
+                    currentSprite.y = Number(split[1]);
                     currentSprite.z = Number(split[2]);
                 } else if (part !== 'SPRITE') {
                     currentSprite[split[0]] = split[1];
@@ -55,7 +55,7 @@ function createStructure(map) {
                         walls[walls.length-1].x2 = Number(split[0]); walls[walls.length-1].y2 = Number(split[1])
                     }
 
-                    walls.push({TEXTURES: []}); 
+                    walls.push({TEXTURES: []});
 
                     // first vertex of new wall
                     walls[walls.length - 1].x1 = Number(split[0]); walls[walls.length - 1].y1 = Number(split[1]);
@@ -66,10 +66,10 @@ function createStructure(map) {
                 if (!isNaN(split[0])) {continue;}
                 if (split[0] === 'ADJ') {for (let j = 1; j < split.length; j++) {
                     // adding all the adjoins
-                    
+
                     if (!adjoins.hasOwnProperty(current)) {adjoins[current] = {};}
                     if (!adjoins[current].hasOwnProperty(walls.length-1)) {adjoins[current][walls.length-1] = [];}
-                    adjoins[current][walls.length-1].push(split[j]); 
+                    adjoins[current][walls.length-1].push(split[j]);
                     continue;
                 }} else {
                     // the current value is the texture
@@ -83,7 +83,7 @@ function createStructure(map) {
 }
 function createSectors(map) {
     let structure = createStructure(map);
-    let sectorsToCreate = structure.sectors; 
+    let sectorsToCreate = structure.sectors;
     let adjoins = structure.adjoins;
     let sectors = {}
     for (let name in sectorsToCreate) {
@@ -103,7 +103,7 @@ function createSectors(map) {
 
             // sorts the adjoins by height
             currentAdjoins.sort((a, b) => {return (a.ceilingZ < b.ceilingZ) ? 1 : a.ceilingZ === b.ceilingZ ? 0 : -1});
-            
+
             sectors[name].walls[wall].adjoins = currentAdjoins;
         }
     }
@@ -113,4 +113,4 @@ function loadMap(source) {
     let map = new Promise(resolve => fetch(source).then(content => content.text().then(text => resolve(text))));
     return new Promise(resolve => map.then(string => resolve(createSectors(string))));
 }
-export { loadMap };
+export {loadMap};
