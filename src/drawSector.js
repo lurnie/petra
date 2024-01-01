@@ -9,7 +9,7 @@ function drawVerticalLineSurface(canvas, x, topY, bottomY, player, sector, shade
     // draw horizontal lines instead of vertical ones
     let surfaceHeight;
     if (floor) {surfaceHeight = sector.floorZ} else {surfaceHeight = sector.ceilingZ}
-    let scale = sector.tileScale / 100;
+    let scale = 1 / sector.tileScale / 100;
     let height = (player.z + player.height - surfaceHeight) * scale;
     for (let y = topY; y <= bottomY; y++) {
         let floorX = canvas.width / (y - player.upDown - canvas.height / 2) * height;

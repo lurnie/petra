@@ -3,7 +3,7 @@
 
 // note that, in this engine, Z is the height (up/down)
 
-#start, FLOORZ 0, CEILINGZ 1000, SHADE 0.8, FLOORT def, CEILINGT cross, TILESCALE 0.3
+#start, FLOORZ 0, CEILINGZ 1000, SHADE 0.8, FLOORT def, CEILINGT cross, TILESCALE 3
 
 // to create a sector, start the line with # and the sector's name (no spaces)
 // then, use the rest of the line for the sector's attributes, separated by ,
@@ -17,19 +17,28 @@
 
 // you can add adjoins (connections to other sectors) by writing ADJ and then listing the sectors this wall connects to
 
-SPRITE, 0 200 300, TEXTURE cat, SCALE 0.2, SPRITE, -300 200 50, TEXTURE cat, SCALE 0.05
+// note, currently you need to write the walls in clockwise (going right from inside) order
+// TODO: make this not necessary
+
+SPRITE, 0 200 300, TEXTURE cat, SCALE 0.2, SPRITE, -300 200 50, TEXTURE cat, SCALE 1
 
 // to create a sprite, start with SPRITE. write x y z coordinates with spaces between them, and add any other attributes, separated by ,
 // you can have multiple sprites, as long as you separate each with SPRITE
 // all sprites in a sector must be written on the same line
 
 
-#2, FLOORZ 25, CEILINGZ 350, SHADE 0.5, FLOORT gray, CEILINGT gray, TILESCALE 0.5, XOFFSET 3, YOFFSET 20, ANGLEOFFSET 1.44
+#2, FLOORZ 25, CEILINGZ 350, SHADE 0.5, FLOORT gray, CEILINGT gray, TILESCALE 2, XOFFSET 3, YOFFSET 20, ANGLEOFFSET 1.44
 -400 -160, gray, -417 -360, gray, 36 -466, gray, 364 -287, gray, ADJ #3, 200 -100, gray, ADJ #start
 SPRITE, -80 -271 180, TEXTURE cat, SCALE 0.2
 
-#3, FLOORZ 150, CEILINGZ 600, SHADE 1, FLOORT cat, CEILINGT cross, TILESCALE 0.5
+#3, FLOORZ 150, CEILINGZ 600, SHADE 1, FLOORT cat, CEILINGT cross, TILESCALE 2
 462 162, 200 -100, gray, ADJ #2 #4, 364 -287, gray, 710 -233, 467 162
 
-#4, FLOORZ 400, CEILINGZ 800, SHADE 0.5, FLOORT gray, CEILINGT gray, TILESCALE 0.5, XOFFSET 3, YOFFSET 20, ANGLEOFFSET 1.44
--400 -160, gray, -417 -400, gray, 36 -500, gray, 364 -287, ADJ #3, gray, 200 -100, gray, ADJ #start
+#4, FLOORZ 400, CEILINGZ 800, SHADE 0.5, FLOORT gray, CEILINGT gray, TILESCALE 2, XOFFSET 3, YOFFSET 20, ANGLEOFFSET 1.44
+-400 -160, gray, -417 -400, gray, ADJ #5, 36 -500, gray, 364 -287, ADJ #3, gray, 200 -100, gray, ADJ #start
+
+#5, FLOORZ 0, CEILINGZ 800, SHADE 1, FLOORT grass, CEILINGT grass, TILESCALE 5
+-500 -1000, wood, 100 -1500, ADJ #6, 50 -524, gray, 36 -500, gray, ADJ #4, -417 -400, wood
+
+#6, FLOORZ 0, CEILINGZ 800, SHADE 1, FLOORT grass, CEILINGT grass, TILESCALE 5
+100 -1500, wood, 500 -1000, wood, 364 -287, gray, 50 -524, ADJ #5

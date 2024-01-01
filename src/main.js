@@ -64,6 +64,8 @@ function init(loadedMap) {
     loadTexture('./img/cross.jpg', 'cross', textures, canvas);
     loadTexture('./img/gray.jpg', 'gray', textures, canvas);
     loadTexture('./img/bricks.png', 'def', textures, canvas);
+    loadTexture('./img/grass.png', 'grass', textures, canvas);
+    loadTexture('./img/wood.jpg', 'wood', textures, canvas);
 
     const crossHeight = canvas.height / 62;
     const crossThick = canvas.height / 500;
