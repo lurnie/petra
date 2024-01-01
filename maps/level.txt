@@ -20,7 +20,7 @@
 // note, currently you need to write the walls in clockwise (going right from inside) order
 // TODO: make this not necessary
 
-SPRITE, 0 200 300, TEXTURE cat, SCALE 0.2, SPRITE, -300 200 50, TEXTURE cat, SCALE 1
+SPRITE, 0 200 300, TEXTURE cat, SCALE 0.2, SPRITE, -300 200 50, TEXTURE cat, SCALE 0.05
 
 // to create a sprite, start with SPRITE. write x y z coordinates with spaces between them, and add any other attributes, separated by ,
 // you can have multiple sprites, as long as you separate each with SPRITE
