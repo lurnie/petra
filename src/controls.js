@@ -36,7 +36,7 @@ function controls(player, pressedKeys, mouse, spf, canvas) {
 
     const angleSpeed = 0.006;
     player.angle -= mouse.x * angleSpeed;
-    const upDownSpeed = 4;
+    const upDownSpeed = canvas.height / 128;
     player.upDown -= mouse.y * upDownSpeed;
 
     player.sinAngle = Math.sin(player.angle);
