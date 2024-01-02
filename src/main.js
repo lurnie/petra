@@ -2,7 +2,7 @@
 
 import {renderCanvas, Clipping, drawPixel} from "./render.js";
 import {controls} from "./controls.js";
-import {loadTexture} from "./textures.js";
+import {getTextures} from "./textures.js";
 import {drawWall} from "./drawSector.js";
 import {drawSprite} from "./drawSprite.js";
 import {loadMap} from "./map.js";
@@ -60,12 +60,7 @@ function init(loadedMap) {
     });
 
     let textures = {};
-    loadTexture('./img/cat.jpg', 'cat', textures, canvas);
-    loadTexture('./img/cross.jpg', 'cross', textures, canvas);
-    loadTexture('./img/gray.jpg', 'gray', textures, canvas);
-    loadTexture('./img/bricks.png', 'def', textures, canvas);
-    loadTexture('./img/grass.png', 'grass', textures, canvas);
-    loadTexture('./img/wood.jpg', 'wood', textures, canvas);
+    getTextures(textures, canvas); // loads all the textures
 
     const crossHeight = canvas.height / 62;
     const crossThick = canvas.height / 500;

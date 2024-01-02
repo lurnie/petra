@@ -1,3 +1,12 @@
+function getTextures(textures, canvas) {
+    loadTexture('./img/cat.jpg', 'cat', textures, canvas);
+    loadTexture('./img/cross.jpg', 'cross', textures, canvas);
+    loadTexture('./img/gray.jpg', 'gray', textures, canvas);
+    loadTexture('./img/bricks.png', 'def', textures, canvas);
+    loadTexture('./img/grass.png', 'grass', textures, canvas);
+    loadTexture('./img/wood.jpg', 'wood', textures, canvas);
+}
+
 function loadTexture(source, name, textures, canvas) {
     // set the texture as some temporary placeholder value
     textures[name] = {
@@ -26,4 +35,4 @@ function loadTexture(source, name, textures, canvas) {
     }
 }
 
-export {loadTexture};
+export {getTextures};
