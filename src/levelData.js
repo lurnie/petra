@@ -20,7 +20,7 @@ class Wall {
 }
 
 class Sector {
-    constructor(floorZ, ceilingZ, brightness, walls, floorTexture='def', ceilingTexture='def', tileScale=1, textureXoffset=0, textureYoffset=0, textureAngleOffset=0,) {
+    constructor(floorZ, ceilingZ, brightness, walls, floorTexture='def', ceilingTexture='def', tileScale=1, textureXoffset=0, textureYoffset=0, textureAngleOffset=0, sky=false, name) {
         this.floorZ = floorZ;
         this.ceilingZ = ceilingZ;
         this.brightness = brightness
@@ -33,6 +33,13 @@ class Sector {
         this.floorTexture = floorTexture;
         this.ceilingTexture = ceilingTexture;
         this.sprites = [ ];
+        this.sky = sky;
+        this.name = name;
+
+        // sky sectors go up infinitely high, so some equations (like how high to draw adjoins) use top instead of ceilingZ
+        // you can't just set ceilingZ to infinity, since ceilingZ is also used to draw walls
+        this.top = this.ceilingZ;
+        if (this.sky) {this.top = Infinity;}
 
         this.walls = walls;
         this.walls.forEach((wall) => {wall.z1 = this.floorZ; wall.z2 = this.ceilingZ; wall.brightness = this.brightness; wall.sector = this;})

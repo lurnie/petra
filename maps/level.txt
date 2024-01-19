@@ -34,11 +34,22 @@ SPRITE, -80 -271 180, TEXTURE cat, SCALE 0.2
 #3, FLOORZ 150, CEILINGZ 600, SHADE 1, FLOORT cat, CEILINGT cross, TILESCALE 2
 462 162, 200 -100, gray, ADJ #2 #4, 364 -287, gray, 710 -233, 467 162
 
-#4, FLOORZ 400, CEILINGZ 800, SHADE 0.5, FLOORT gray, CEILINGT gray, TILESCALE 2, XOFFSET 3, YOFFSET 20, ANGLEOFFSET 1.44
+#4, FLOORZ 400, CEILINGZ 650, SHADE 0.5, FLOORT gray, CEILINGT gray, TILESCALE 2, XOFFSET 3, YOFFSET 20, ANGLEOFFSET 1.44
 -400 -160, gray, -417 -400, gray, ADJ #5, 36 -500, gray, 364 -287, ADJ #3, gray, 200 -100, gray, ADJ #start
 
-#5, FLOORZ 0, CEILINGZ 800, SHADE 1, FLOORT grass, CEILINGT grass, TILESCALE 5
--500 -1000, wood, 100 -1500, ADJ #6, 50 -524, gray, 36 -500, gray, ADJ #4, -417 -400, wood
+#5, FLOORZ 350, CEILINGZ 670, SHADE 1, FLOORT grass, SKY mountains, TILESCALE 5
+-500 -1000, wood, 100 -1500, ADJ #6, 50 -524, gray, ADJ #roofSmallPart, 36 -500, gray, ADJ #roof, ADJ #4, -417 -400, wood
 
-#6, FLOORZ 0, CEILINGZ 800, SHADE 1, FLOORT grass, CEILINGT grass, TILESCALE 5
-100 -1500, wood, 500 -1000, wood, 364 -287, gray, 50 -524, ADJ #5
+// you can create a sector with a sky instead of a ceiling by using the attribute SKY instead of CEILINGT
+// note that you still need to write a CEILINGZ for the wall heights
+// NOTE, it's probably a bad idea to stack 2 sky sectors on top of each other
+
+#6, FLOORZ 300, CEILINGZ 670, SHADE 0.7, FLOORT grass, SKY mountains, TILESCALE 5
+100 -1500, wood, 500 -1000, wood, 364 -287, gray, ADJ #roofSmallPart, 50 -524, grass, ADJ #5
+
+#roof, FLOORZ 700, CEILINGZ 700, SHADE 0.5, FLOORT gray, SKY mountains, TILESCALE 2
+-400 -160, -417 -400, ADJ #5, 36 -500, ADJ #roofSmallPart, 364 -287, 200 -100
+
+// the roof is split into 2 sectors since a single sector with angles > 180 isn't allowed
+#roofSmallPart, FLOORZ 700, CEILINGZ 700, SHADE 0.5, FLOORT gray, SKY mountains, TILESCALE 2
+364 -287, ADJ #roof, 36 -500, ADJ #5, 50 -524, ADJ #6

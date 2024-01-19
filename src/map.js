@@ -90,7 +90,7 @@ function createSectors(map) {
         let sector = sectorsToCreate[name];
         let walls = [];
         for (let wall of sector.walls) {walls.push(new Wall(wall.x1, wall.y1, wall.x2, wall.y2, wall.TEXTURES));}
-        sectors[name] = new Sector(num(sector.FLOORZ), num(sector.CEILINGZ), num(sector.SHADE), walls, sector.FLOORT, sector.CEILINGT, num(sector.TILESCALE), num(sector.XOFFSET), num(sector.YOFFSET), num(sector.ANGLEOFFSET))
+        sectors[name] = new Sector(num(sector.FLOORZ), num(sector.CEILINGZ), num(sector.SHADE), walls, sector.FLOORT, sector.CEILINGT, num(sector.TILESCALE), num(sector.XOFFSET), num(sector.YOFFSET), num(sector.ANGLEOFFSET), sector.SKY, name)
         if (sectorsToCreate[name].hasOwnProperty('sprites')) {
             sectorsToCreate[name].sprites.forEach(sprite => {new Sprite(sprite.x, sprite.y, sprite.z, sectors[name], sprite.TEXTURE, num(sprite.SCALE), num(sprite.SHADE), (sprite.UPDATESHADE === 'false') ? false : true)});
         }

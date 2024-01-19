@@ -7,7 +7,9 @@ function move(player, amount, angle) {
 
     player.sector.walls.forEach((wall) => {
         if (wall.adjoins) {for (let sector of wall.adjoins) {
-            if (intersectionOfLineSegments(player.x, player.y, newX, newY, wall.x1, wall.y1, wall.x2, wall.y2) && player.z >= sector.floorZ && player.z <= sector.ceilingZ) {
+            // you must be above the floor and either below the ceiling or going between 1 sky sectors
+            let withinBounds = (player.z >= sector.floorZ && player.z < sector.top)
+            if (intersectionOfLineSegments(player.x, player.y, newX, newY, wall.x1, wall.y1, wall.x2, wall.y2) && withinBounds) {
                 if (newY === lineY(wall.slope, wall.x1, wall.y1, newX)) {
                     // if the player ends up exactly ON an adjoin, they get a tiny boost so they end up properly in the other sector
                     newX += Math.cos(-angle) * 2; newY += Math.sin(-angle) * 2;

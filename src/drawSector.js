@@ -2,6 +2,45 @@ import {drawPixel, screenPos, Clipping} from "./render.js";
 import {intersectionOfLines, lineY, rotate} from "./math.js";
 
 
+function drawSkyLine(x, bottom, y, player, texture, canvas) {
+    // draws the skybox
+    const ySize = 0.5;
+    const yParallax = 1.5;
+    let textureYStep = texture.height / (canvas.width * ySize);
+    let textureY = (y - player.upDown / yParallax) / (canvas.height * ySize) * texture.height;
+    let textureX = (x / canvas.width - (4 * player.angle / (Math.PI*2))) * texture.width;
+
+    while (y <= bottom) {
+        if (textureX < 0) {textureX += texture.width}
+        if (textureX > texture.width) {textureX -= texture.width}
+
+        let shade = 1;
+        let textureYPercent = textureY/texture.height;
+
+        // to make the top and bottom of the sky texture look good, they fade into an average
+        let average;
+        if (textureYPercent < 0.5) {average = texture.averageTop;} else {average = texture.averageBottom;}
+        let r2 = average[0];
+        let g2 = average[1];
+        let b2 = average[2];
+        let mix = 1; // how faded it should be
+        if (textureYPercent < 0.3) {mix += (textureYPercent-0.3)/0.3;}
+        if (textureYPercent > 0.7) {mix -= (textureYPercent-0.7)/0.3;}
+        if (mix < 0) {mix = 0}
+
+        let mp = Math.floor(Math.floor(textureY) * texture.width + Math.floor(textureX)) * 4;
+        if (mp < 0) {mp = 0;}
+        if (mp > texture.pixels.length) {mp = 0;}
+        let r = texture.pixels[mp] * shade;
+        let g = texture.pixels[mp + 1] * shade;
+        let b = texture.pixels[mp + 2] * shade;
+        drawPixel(canvas, x, y, r*mix+r2*(1-mix), g*mix+g2*(1-mix), b*mix+b2*(1-mix));
+
+        textureY += textureYStep;
+        y++;
+    }
+}
+
 function drawVerticalLineSurface(canvas, x, topY, bottomY, player, sector, shade, texture, floor) {
     // used for drawing "surfaces" (the floor and ceiling)
 
@@ -35,7 +74,7 @@ function drawVerticalLineSurface(canvas, x, topY, bottomY, player, sector, shade
 }
 
 function drawVerticalLine(canvas, x, topY, bottomY, texture, textureX, textureY, textureYStep, shade) {
-    for (let y = topY; y <= bottomY; y++) {
+    for (let y = topY; y < bottomY; y++) {
         let textureMp = Math.floor(Math.floor(textureY) * texture.width + textureX) * 4;
         let r = texture.pixels[textureMp];
         let g = texture.pixels[textureMp + 1];
@@ -131,22 +170,29 @@ function drawWall(wall, canvas, player, clippingWindows, textures) {
                 l: screenPos(adjoinX1, adjoinY1, adjoin.floorZ, player, canvas),
                 r: screenPos(adjoinX2, adjoinY2, adjoin.floorZ, player, canvas)
             };
+            let adjoinTop;
+            // if this is the
+            if (i === 0) {adjoinTop = adjoin.top;} else {adjoinTop = adjoin.ceilingZ;}
             let topAdj = {
-                l: screenPos(adjoinX1, adjoinY1, adjoin.ceilingZ, player, canvas),
-                r: screenPos(adjoinX2, adjoinY2, adjoin.ceilingZ, player, canvas)
+                l: screenPos(adjoinX1, adjoinY1, adjoinTop, player, canvas),
+                r: screenPos(adjoinX2, adjoinY2, adjoinTop, player, canvas)
             };
 
             // makes sure the adjoin fits within this wall
+
+            // since sky sectors go infinitely high, they don't need to have adjoins to fit within the wall
+            if (!wall.sector.sky) {
+                if (topAdj.l.y < top.l.y) {topAdj.l.y = top.l.y;}
+                if (topAdj.r.y < top.r.y) {topAdj.r.y = top.r.y;}
+            }
             if (bottomAdj.l.y > bottom.l.y) {bottomAdj.l.y = bottom.l.y;}
             if (bottomAdj.r.y > bottom.r.y) {bottomAdj.r.y = bottom.r.y;}
-            if (topAdj.l.y < top.l.y) {topAdj.l.y = top.l.y;}
-            if (topAdj.r.y < top.r.y) {topAdj.r.y = top.r.y;}
 
             let slopeBottomAdj = (bottomAdj.r.y - bottomAdj.l.y) / (bottomAdj.r.x - bottomAdj.l.x);
             let slopeTopAdj = (topAdj.r.y - topAdj.l.y) / (topAdj.r.x - topAdj.l.x);
 
             // prevents the clipping window coordinates from being larger than the screen
-            // TODO: make this less repetative(?)
+            // TODO: make this less repetitive(?)
 
             // left
             if (topAdj.l.x < clipping.x1) {
@@ -194,7 +240,7 @@ function drawWall(wall, canvas, player, clippingWindows, textures) {
                 yClipTop = lineY(c.slopeTop, c.x1, c.y1top, x);
             }
             if (yClipBottom >  lineY(c.slopeBottom, c.x1, c.y1bottom, x)) {
-                yClipBottom = lineY(c.slopeBottom, c.x1, c.y1bottom, x) - 1;
+                yClipBottom = lineY(c.slopeBottom, c.x1, c.y1bottom, x);
             }
         }
 
@@ -226,6 +272,11 @@ function drawWall(wall, canvas, player, clippingWindows, textures) {
 
             let floorTopY = bottomY;
             let ceilingBottomY = topY;
+
+            // if 2 sky sectors are connected, this prevents overdraw by stopping the current sector from drawing the same sky that the
+            // adjoining sector will later draw
+            if (number === 0 && wall.sector.sky && wall.adjoins) {if (wall.adjoins[0].sky) {continue;}}
+
             if (wall.adjoins) {
                 // a section that's part of a wall with an adjoin might not generate a ceiling or a floor (or both)
                 // the numbers get set to infinities so that they will always fail the checks and the floor or ceiling won't be drawn
@@ -236,9 +287,18 @@ function drawWall(wall, canvas, player, clippingWindows, textures) {
             let shade = wall.brightness;
 
             // drawing the floor
-            if (floorTopY < yClipBottom) {drawVerticalLineSurface(canvas, x, floorTopY, yClipBottom, player, wall.sector, shade, textures[wall.sector.floorTexture], true);}
-            // drawing the ceiling
-            if (ceilingBottomY > yClipTop) {drawVerticalLineSurface(canvas, x, yClipTop, ceilingBottomY, player, wall.sector, shade, textures[wall.sector.ceilingTexture], false);}
+            if (floorTopY < yClipBottom) {
+                drawVerticalLineSurface(canvas, x, floorTopY, yClipBottom, player, wall.sector, shade, textures[wall.sector.floorTexture], true);
+            }
+            // drawing the ceiling or sky
+            if (ceilingBottomY > yClipTop) {
+                if (wall.sector.sky) {
+                    drawSkyLine(Math.floor(x), topY, Math.floor(yClipTop), player, textures[wall.sector.sky], canvas);
+                } else {
+                   drawVerticalLineSurface(canvas, x, yClipTop, ceilingBottomY, player, wall.sector, shade, textures[wall.sector.ceilingTexture], false);
+                }
+
+            }
 
             // drawing the actual wall
             drawVerticalLine(canvas, x, topY, bottomY, texture, textureX, textureY, textureYStep, shade);
