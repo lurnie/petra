@@ -22,10 +22,10 @@ The level is rendered by first drawing all the walls in the player's current sec
 Then, if any walls have adjoins, it will go to the adjoining sector and draw that one within a smaller window.
 ## Todo
 -  [x] Load levels from files
+- [x] Sky
 - [ ] Collision
 - [ ] More texture options
 - [ ] Concave sectors
-- [ ] Sky
 - [ ] Decals
 - [ ] Slopes
 -  [ ] Level editor
