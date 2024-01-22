@@ -26,7 +26,7 @@ function init(loadedMap) {
         speed: 10,
         angle: 0,
         upDown: 0,
-        height: 0, // how high the camera is compared to the player z
+        height: 10, // how high the camera is compared to the player z
         zoom: 1, // NOTE: currently, changing the zoom messes up the floors
         sector: sectors['#start']
     };

@@ -21,6 +21,14 @@ function move(player, amount, angle) {
     player.x = newX;
     player.y = newY;
 }
+function moveZ(player, amount) {
+    let newZ = player.z + amount;
+
+    // TODO: use a variable other than the camera height
+    if (newZ + player.height > player.sector.top) {newZ = player.sector.top - player.height;}
+    if (newZ < player.sector.floorZ) {newZ = player.sector.floorZ;}
+    player.z = newZ;
+}
 
 function controls(player, pressedKeys, mouse, spf, canvas) {
     let fps = 1/spf;
@@ -31,8 +39,8 @@ function controls(player, pressedKeys, mouse, spf, canvas) {
     if (pressedKeys.includes('KeyA')) { move(player, player.speed, player.angle + (Math.PI / 2)) }
     if (pressedKeys.includes('KeyD')) { move(player, -player.speed, player.angle + (Math.PI / 2)) }
 
-    if (pressedKeys.includes('Space')) {player.z += player.speed;}
-    if (pressedKeys.includes('ShiftLeft')) {player.z -= player.speed;}
+    if (pressedKeys.includes('Space')) {moveZ(player, player.speed);}
+    if (pressedKeys.includes('ShiftLeft')) {moveZ(player, -player.speed);}
 
     const maxUpDown = canvas.height * 1.5;
 
