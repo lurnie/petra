@@ -1,5 +1,5 @@
 class Wall {
-    constructor(x1, y1, x2, y2, texture='def', adjoins=false, z1, z2) {
+    constructor(x1, y1, x2, y2, texture='def', adjoins=false, z1, z2, scaleX=1, scaleY=1, tx=0, ty=0, stretchX=false, stretchY=false) {
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
@@ -11,6 +11,14 @@ class Wall {
         if (adjoins.length === 0) {this.adjoins = false;}
         this.texture = texture;
         if (texture.length === 0) {texture = 'def';}
+
+        // all the tiling-related attributes
+        this.scaleX = scaleX;
+        this.scaleY = scaleY;
+        this.tx = tx;
+        this.ty = ty;
+        this.stretchX = stretchX;
+        this.stretchY = stretchY;
 
         if (!(texture instanceof Array)) {
             this.texture = [texture, ];

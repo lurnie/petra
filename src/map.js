@@ -71,8 +71,17 @@ function createStructure(map) {
                     if (!adjoins[current].hasOwnProperty(walls.length-1)) {adjoins[current][walls.length-1] = [];}
                     adjoins[current][walls.length-1].push(split[j]);
                     continue;
-                }} else {
-                    // the current value is the texture
+                }} else if (split[0] === split[0].toUpperCase()) {
+                    // adding attributes (capitalized KEYWORDS)
+                    if (split.length === 1) {
+                        // if it's just a keyword followed by nothing (ex. STRETCHEDX), the value should be set to true
+                        walls[walls.length-1][split[0]] = true;
+                    } else {
+                        // otherwise, set it to the following value
+                        walls[walls.length-1][split[0]] = split[1];
+                    }
+                } else {
+                    // sets the texture
                     for (let texture of split) {walls[walls.length-1].TEXTURES.push(texture);}
                 }
             }
@@ -89,7 +98,13 @@ function createSectors(map) {
     for (let name in sectorsToCreate) {
         let sector = sectorsToCreate[name];
         let walls = [];
-        for (let wall of sector.walls) {walls.push(new Wall(wall.x1, wall.y1, wall.x2, wall.y2, wall.TEXTURES));}
+        for (let wall of sector.walls) {
+            // the SCALE keyword can be used to set SCALEX and SCALEY at once
+            if (wall.SCALE) {wall.SCALEX = wall.SCALE; wall.SCALEY = wall.SCALE;}
+
+            walls.push(new Wall(wall.x1, wall.y1, wall.x2, wall.y2, wall.TEXTURES, undefined, undefined, undefined, num(wall.SCALEX), num(wall.SCALEY), num(wall.TX), num(wall.TY), wall.STRETCHX, wall.STRETCHY));
+        }
+
         sectors[name] = new Sector(num(sector.FLOORZ), num(sector.CEILINGZ), num(sector.SHADE), walls, sector.FLOORT, sector.CEILINGT, num(sector.TILESCALE), num(sector.XOFFSET), num(sector.YOFFSET), num(sector.ANGLEOFFSET), sector.SKY, name)
         if (sectorsToCreate[name].hasOwnProperty('sprites')) {
             sectorsToCreate[name].sprites.forEach(sprite => {new Sprite(sprite.x, sprite.y, sprite.z, sectors[name], sprite.TEXTURE, num(sprite.SCALE), num(sprite.SHADE), (sprite.UPDATESHADE === 'false') ? false : true)});

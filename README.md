@@ -23,8 +23,8 @@ Then, if any walls have adjoins, it will go to the adjoining sector and draw tha
 ## Todo
 -  [x] Load levels from files
 - [x] Sky
+- [x] Tiling textures
 - [ ] Collision
-- [ ] More texture options
 - [ ] Concave sectors
 - [ ] Decals
 - [ ] Slopes

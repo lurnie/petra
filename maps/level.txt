@@ -8,7 +8,7 @@
 // to create a sector, start the line with # and the sector's name (no spaces)
 // then, use the rest of the line for the sector's attributes, separated by ,
 
--400 -160, cross gray gray, ADJ #2 #4, 200 -100, 260 240, 60 400, -400 280, cross
+-400 -160, cross gray gray, ADJ #2 #4, 200 -100, 260 240, 60 400, -400 280, cross, STRETCHX, STRETCHY
 
 // to define a sector's walls, list the sector's vertices after creating it, with a space between x and y, and a , between each vertex
 // you can add textures by writing the texture's name in between the 2 vertices of the wall. if the wall is connected to sectors, you
@@ -16,6 +16,12 @@
 // should use them (high -> low)
 
 // you can add adjoins (connections to other sectors) by writing ADJ and then listing the sectors this wall connects to
+
+// other keywords are used here to modify the tiling attributes. TX and TY shift the texture X and Y, SCALEX and SCALEY scale the tiling x
+// and y, with SCALE doing both at the same time, and just writing STRETCHX or STRETCHY turns off tiling and stretches the texture out
+// over the wall.
+
+// these wall attributes are always capitalized, while textures are not
 
 // note, currently you need to write the walls in clockwise (going right from inside) order
 // TODO: make this not necessary

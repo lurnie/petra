@@ -76,11 +76,14 @@ function drawVerticalLineSurface(canvas, x, topY, bottomY, player, sector, shade
 function drawVerticalLine(canvas, x, topY, bottomY, texture, textureX, textureY, textureYStep, shade) {
     for (let y = topY; y < bottomY; y++) {
         let textureMp = Math.floor(Math.floor(textureY) * texture.width + textureX) * 4;
+        //while (textureMp > texture.width * texture.height * 4) {textureMp -= texture.width*texture.height * 4;}
+        while (textureX > texture.width) {textureX -= texture.width}
         let r = texture.pixels[textureMp];
         let g = texture.pixels[textureMp + 1];
         let b = texture.pixels[textureMp + 2];
         drawPixel(canvas, x, y, r * shade, g * shade, b * shade);
         textureY += textureYStep;
+        while (textureY > texture.height) {textureY -= texture.height;}
     }
 }
 
@@ -132,14 +135,14 @@ function drawWall(wall, canvas, player, clippingWindows, textures) {
     let endingX = top.r.x;
 
     // clip the x of the wall
-    let textureX;
     if ((startingX > clipping.x2) || (endingX < clipping.x1)) {return;} // wall is out of the clipping area/offscreen
     if (startingX < clipping.x1) {startingX = clipping.x1;}
     if (endingX > clipping.x2) {endingX = clipping.x2;}
 
     let sectionsToDraw = [[
-        {slope: slopeTop, x: top.l.x, y: top.l.y},
-        {slope: slopeBottom, x: bottom.r.x, y: bottom.r.y}
+        {slope: slopeTop, x: top.l.x, y: top.l.y,},
+        {slope: slopeBottom, x: bottom.r.x, y: bottom.r.y},
+        {z1: wall.z1, z2: wall.z2}
     ]]
 
     let adjoiningSectors = [];
@@ -216,15 +219,18 @@ function drawWall(wall, canvas, player, clippingWindows, textures) {
             if (i === 0) {
                 sectionsToDraw.push([
                     {slope: slopeTop, x: top.l.x, y: top.l.y},
-                    {slope: slopeTopAdj, x: topAdj.l.x, y: topAdj.l.y}
+                    {slope: slopeTopAdj, x: topAdj.l.x, y: topAdj.l.y},
+                    {z1: adjoin.ceilingZ, z2: wall.z2}
                 ]);
             } else {
-                sectionsToDraw[i][1] = {slope: slopeTopAdj, x: topAdj.l.x, y: topAdj.l.y}
+                sectionsToDraw[i][1] = {slope: slopeTopAdj, x: topAdj.l.x, y: topAdj.l.y};
+                sectionsToDraw[i][2].z1 = adjoin.ceilingZ;
             }
 
             sectionsToDraw.push([
                 {slope: slopeBottomAdj, x: bottomAdj.l.x, y: bottomAdj.l.y},
-                {slope: slopeBottom, x: bottom.l.x, y: bottom.l.y}
+                {slope: slopeBottom, x: bottom.l.x, y: bottom.l.y},
+                {z1: wall.z1, z2: adjoin.floorZ}
             ]);
         }
     }
@@ -253,15 +259,37 @@ function drawWall(wall, canvas, player, clippingWindows, textures) {
             if (number < wall.texture.length) {texture = textures[wall.texture[number]];}
             else {texture = textures[wall.texture[0]];} // some walls don't have different textures for all the sections
 
+
+            // set the textureX and textureY
+
+
+            // scale of the tiled texture
+            // 300/texture.width/height is used so that textures with the same scale tile with the same size
+            let scaleX = 300/texture.width * wall.scaleX; let scaleY = 300/texture.height * wall.scaleY;
+
             let percentX = (x - ogLeft.x) / (ogRight.x - ogLeft.x);
-            textureX = percentX * (texture.width / ogRight.depth) / ( (1-percentX) * (1/ogLeft.depth) + percentX * (1/ogRight.depth) )
+            let textureX;
+            if (wall.stretchX) {
+                // stretches the texture
+                textureX = percentX * (texture.width / ogRight.depth) / ((1-percentX) * (1/ogLeft.depth) + percentX * (1/ogRight.depth));
+            }
+            else {
+                // tiles the texture
+                let amount = percentX * (1 / ogRight.depth)/((1-percentX) * (1/ogLeft.depth) + percentX * (1/ogRight.depth));
+                let numberOfTextures = wall.length / texture.width / scaleX;
+                textureX = amount * (texture.width) * numberOfTextures + wall.tx;
+            }
 
             // calculating top and bottom
             let topY = Math.floor(lineY(section[0].slope, section[0].x, section[0].y, x));
             let bottomY = Math.floor(lineY(section[1].slope, section[1].x, section[1].y, x));
 
-            let textureY = 0;
-            let textureYStep = texture.height / (bottomY - topY);
+            let textureY = wall.ty;
+            let textureYStep;
+
+
+            if (wall.stretchY) {textureYStep = texture.height / (bottomY - topY);}
+            else {textureYStep = 1 / ((bottomY-topY) / (section[2].z2 - section[2].z1)) / scaleY;}
 
             // the actual values are clipped now
             if (topY < yClipTop) {textureY = textureYStep * (yClipTop - topY); topY = yClipTop;}
