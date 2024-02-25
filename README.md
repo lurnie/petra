@@ -31,7 +31,6 @@ Then, if any walls have adjoins, it will go to the adjoining sector and draw tha
 -  [ ] Level editor
 
 ## Bugs
-- Changing the zoom causes the floor to behave incorrectly
 - If you get too close to an adjoin, part of it will get cut off
 - Walls sometimes leave a few pixels uncolored
 
