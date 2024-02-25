@@ -50,8 +50,10 @@ function screenPos(x, y, z, player, canvas) {
 
     // instead of just dividing by rotatedX (the depth), it multiplies by canvas width or height divided by rotatedX
     // so that the screen position scales correctly acrosss all resolutions
-    let screenX = rotated.y * (canvas.width * player.zoom / rotated.x) + canvas.width / 2;
-    let screenY = canvas.height / 2 - relativeZ * (canvas.height * player.zoom / rotated.x) + player.upDown;
+
+
+    let screenX =  rotated.y / rotated.x / player.fovTan * (canvas.width/2) + canvas.width/2
+    let screenY = canvas.height/2 - (relativeZ / rotated.x / player.fovTan) * (canvas.height/2) + player.upDown
 
     return {x: screenX, y: screenY, depth: rotated.x}; // returns the depth (rotatedX) since walls and sprites use that a bit
 }

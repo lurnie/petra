@@ -27,8 +27,8 @@ function init(loadedMap) {
         angle: 0,
         upDown: 0,
         height: 10, // how high the camera is compared to the player z
-        zoom: 1, // NOTE: currently, changing the zoom messes up the floors
-        sector: sectors['#start']
+        sector: sectors['#start'],
+        fov: 70
     };
 
     let spf = 0;
@@ -87,6 +87,9 @@ function init(loadedMap) {
         thisFrame = Date.now()/1000;
         spf = thisFrame - lastFrame;
         for (let i = 0; i < canvas.pixels.length; i++) {canvas.pixels[i] = 0;}
+
+        // cuts the fov in half, converts to radians, then gets tangent
+        player.fovTan = Math.tan(player.fov / 2 * (Math.PI/180));
 
         sectorsToDraw = [[player.sector, [fullscreenClipping]]];
         let spritesToDraw = [];

@@ -48,16 +48,18 @@ function drawVerticalLineSurface(canvas, x, topY, bottomY, player, sector, shade
     // draw horizontal lines instead of vertical ones
     let surfaceHeight;
     if (floor) {surfaceHeight = sector.floorZ} else {surfaceHeight = sector.ceilingZ}
-    let scale = 1 / sector.tileScale / 100;
+    let scale = 1 / sector.tileScale / player.fovTan / 200;
     let height = (player.z + player.height - surfaceHeight) * scale;
     for (let y = topY; y <= bottomY; y++) {
-        let floorX = canvas.width / (y - player.upDown - canvas.height / 2) * height;
-        let floorY =  (x - canvas.width/2) / (y - player.upDown - canvas.width / 2) * height;
+        let floorY =  (x - canvas.width/2) / (y - player.upDown - canvas.width / 2) * height * player.fovTan*2;
+        let floorX = canvas.height / (y - player.upDown - canvas.height/2) * height
 
         let rotated = rotate(floorX, floorY, player.cosAngle, player.sinAngle)
 
-        rotated.x += (player.x + sector.textureXoffset) * scale;
-        rotated.y -= (player.y + sector.textureYoffset) * scale;
+        let moveScale = player.fovTan * 2;
+
+        rotated.x += (player.x + sector.textureXoffset) * scale * moveScale;
+        rotated.y -= (player.y + sector.textureYoffset) * scale * moveScale;
 
         rotated = rotate(rotated.x, rotated.y, sector.cosAngle, sector.sinAngle)
 
