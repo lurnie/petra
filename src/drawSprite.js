@@ -8,7 +8,7 @@ function drawSprite(sprite, canvas, player, clippingWindows, textures) {
 
     let depth = startingPoint.depth;
 
-    const scaler = sprite.scale * player.zoom;
+    const scaler = sprite.scale / player.fovTan;
     let width = texture.width * canvas.width * scaler / depth;
     let height = texture.height * canvas.height * scaler / depth;
 
@@ -16,7 +16,6 @@ function drawSprite(sprite, canvas, player, clippingWindows, textures) {
     let endX = startingPoint.x + width;
 
     if (depth < 0 ) {return;}
-
     // x clipping
     let textureX = 0;
     let textureXStep = texture.width / width;
@@ -25,11 +24,10 @@ function drawSprite(sprite, canvas, player, clippingWindows, textures) {
     let clipping = clippingWindows[0];
     if (endX < clipping.x1 || startX > clipping.x2) {return;}
     if (startX < clipping.x1) {textureX = (clipping.x1 - startX) * textureXStep; startX = clipping.x1;}
-    if (endX > clipping.x2) {endX = clipping.x2;
-    }
+    if (endX > clipping.x2) {endX = clipping.x2;}
     for (let x = startX; x < endX; x++) {
         let topY = startingPoint.y;
-        let bottomY = startingPoint.y + height
+        let bottomY = startingPoint.y + height;
 
         // y clipping
         let textureY = 0;
